@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIAsyncTaskBlueprintProxyV2.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AIBlueprintHelperLibraryV2.generated.h"
 
@@ -20,7 +19,7 @@ class AIMOVETO_API UAIBlueprintHelperLibraryV2 : public UBlueprintFunctionLibrar
 
 public:
 	UFUNCTION(BlueprintCallable, meta=(WorldContext="WorldContextObject", BlueprintInternalUseOnly = "TRUE"))
-	static UAIAsyncTaskBlueprintProxyV2* CreateMoveToV2ProxyObject(
+	static UAIAsyncTaskBlueprintProxy* CreateMoveToV2ProxyObject(
 		UObject* WorldContextObject,
 		APawn* Pawn,
 		FVector Destination,

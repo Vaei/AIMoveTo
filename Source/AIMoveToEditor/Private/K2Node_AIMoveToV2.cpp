@@ -2,9 +2,9 @@
 
 #include "K2Node_AIMoveToV2.h"
 
-#include "AIAsyncTaskBlueprintProxyV2.h"
 #include "AIBlueprintHelperLibraryV2.h"
 #include "EditorCategoryUtils.h"
+#include "Blueprint/AIAsyncTaskBlueprintProxy.h"
 
 #define LOCTEXT_NAMESPACE "K2Node_AIMoveToV2"
 
@@ -13,7 +13,7 @@ UK2Node_AIMoveToV2::UK2Node_AIMoveToV2(const FObjectInitializer& ObjectInitializ
 {
 	ProxyFactoryFunctionName = GET_FUNCTION_NAME_CHECKED(UAIBlueprintHelperLibraryV2, CreateMoveToV2ProxyObject);
 	ProxyFactoryClass = UAIBlueprintHelperLibraryV2::StaticClass();
-	ProxyClass = UAIAsyncTaskBlueprintProxyV2::StaticClass();
+	ProxyClass = UAIAsyncTaskBlueprintProxy::StaticClass();
 }
 
 FText UK2Node_AIMoveToV2::GetTooltipText() const
