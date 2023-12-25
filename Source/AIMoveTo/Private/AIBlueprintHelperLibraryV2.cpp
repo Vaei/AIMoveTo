@@ -10,7 +10,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogAIBlueprintV2, Warning, All);
 
 #define LOCTEXT_NAMESPACE "AIBlueprintHelperLibraryV2"
 
-UAIAsyncTaskBlueprintProxyV2* UAIBlueprintHelperLibraryV2::CreateMoveToV2ProxyObject(UObject* WorldContextObject,
+UAIAsyncTaskBlueprintProxy* UAIBlueprintHelperLibraryV2::CreateMoveToV2ProxyObject(UObject* WorldContextObject,
 	APawn* Pawn, FVector Destination, AActor* TargetActor, float AcceptanceRadius, bool bUsePathfinding,
 	bool bCanStrafe, bool bStopOnOverlap, bool bAllowPartialPaths, TSubclassOf<UNavigationQueryFilter> FilterClass)
 {
@@ -42,12 +42,12 @@ UAIAsyncTaskBlueprintProxyV2* UAIBlueprintHelperLibraryV2::CreateMoveToV2ProxyOb
 		return nullptr;
 	}
 	
-	UAIAsyncTaskBlueprintProxyV2* MyObj = nullptr;
+	UAIAsyncTaskBlueprintProxy* MyObj = nullptr;
 	AAIController* AIController = Cast<AAIController>(Pawn->GetController());
 	if (AIController)
 	{
 		UWorld* World = GEngine->GetWorldFromContextObjectChecked(WorldContextObject);
-		MyObj = NewObject<UAIAsyncTaskBlueprintProxyV2>(World);
+		MyObj = NewObject<UAIAsyncTaskBlueprintProxy>(World);
 
 		FAIMoveRequest MoveReq;
 		MoveReq.SetAcceptanceRadius(AcceptanceRadius);
@@ -79,17 +79,17 @@ UAIAsyncTaskBlueprintProxyV2* UAIBlueprintHelperLibraryV2::CreateMoveToV2ProxyOb
 		{
 		case EPathFollowingRequestResult::RequestSuccessful:
 			MyObj->AIController = AIController;
-			MyObj->AIController->ReceiveMoveCompleted.AddDynamic(MyObj, &UAIAsyncTaskBlueprintProxyV2::OnMoveCompleted);
+			MyObj->AIController->ReceiveMoveCompleted.AddDynamic(MyObj, &UAIAsyncTaskBlueprintProxy::OnMoveCompleted);
 			MyObj->MoveRequestId = ResultData.MoveId;
 			break;
 		
 		case EPathFollowingRequestResult::AlreadyAtGoal:
-			World->GetTimerManager().SetTimer(MyObj->TimerHandle_OnInstantFinish, MyObj, &UAIAsyncTaskBlueprintProxyV2::OnAtGoal, 0.1f, false);
+			World->GetTimerManager().SetTimer(MyObj->TimerHandle_OnInstantFinish, MyObj, &UAIAsyncTaskBlueprintProxy::OnAtGoal, 0.1f, false);
 			break;
 		
 		case EPathFollowingRequestResult::Failed:
 		default:
-			World->GetTimerManager().SetTimer(MyObj->TimerHandle_OnInstantFinish, MyObj, &UAIAsyncTaskBlueprintProxyV2::OnNoPath, 0.1f, false);
+			World->GetTimerManager().SetTimer(MyObj->TimerHandle_OnInstantFinish, MyObj, &UAIAsyncTaskBlueprintProxy::OnNoPath, 0.1f, false);
 			break;
 		}
 	}
